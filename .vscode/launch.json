@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "PatientServiceApplication",
+            "request": "launch",
+            "mainClass": "com.patient.PatientServiceApplication",
+            "projectName": "patientService"
+        },
+        {
+            "type": "java",
+            "name": "DoctorServiceApplication",
+            "request": "launch",
+            "mainClass": "com.doctor.DoctorServiceApplication",
+            "projectName": "doctorService"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AppointmentServiceApplication<appointmentService>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.appointment.AppointmentServiceApplication",
+            "projectName": "appointmentService",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
