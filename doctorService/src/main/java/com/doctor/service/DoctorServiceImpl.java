@@ -1,11 +1,18 @@
 package com.doctor.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
+import com.doctor.dto.UserDto;
 import com.doctor.entities.Doctor;
 import com.doctor.repository.DoctorRepository;
 
@@ -14,6 +21,43 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private final String USER_SERVICE_URL = "http://localhost:8084/uapi/users/";
+
+    //Doctor Signup
+    @Override
+    public ResponseEntity<String> registerDoctor(Doctor doctor, String password, String role) {
+        //Create UserDto (instead of User entity)
+        UserDto userDto = new UserDto();
+        userDto.setEmail(doctor.getEmail());
+        userDto.setPassword(password); // Handle securely
+        userDto.setRole(role);
+
+        // Call Auth Service for user registration
+        String url = USER_SERVICE_URL+"signup";
+
+        try {
+            ResponseEntity<UserDto> userResponse = restTemplate.postForEntity(url, userDto, UserDto.class);
+
+            //Check if user creation was successful
+            if (userResponse.getStatusCode().is2xxSuccessful() && userResponse.getBody() != null) {
+                Long userId = userResponse.getBody().getId(); // Get userId from Auth Service response
+
+                //Save doctor with userId
+                doctor.setUserId(userId);
+                doctorRepository.save(doctor);
+                return ResponseEntity.ok("Doctor registered successfully!");
+            }
+        } catch (RestClientException e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to register user in Auth Service.");
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Doctor registration failed.");
+    }
 
     @Override
     public Doctor saveDoctor(Doctor doctor) {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.patient.entities.Patient;
@@ -47,6 +48,11 @@ public class PatientController {
     public ResponseEntity<String> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return ResponseEntity.ok("Patient deleted successfully!");
+    }
+    
+    @PostMapping("/signup")
+    public ResponseEntity<String> registerPatient(@RequestBody Patient patient, @RequestParam String password, @RequestParam String role) {
+        return patientService.registerPatient(patient, password, role);
     }
     
 }
