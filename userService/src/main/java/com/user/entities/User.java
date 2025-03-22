@@ -1,5 +1,6 @@
 package com.user.entities;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,17 +27,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    // private String name;
     private String email;
     private String password;
     private String role; // PATIENT, DOCTOR, ADMIN
-    private String phone;
-    private Boolean isActive;
+    // private String phone;
+    // private Boolean isActive;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private Instant tokenValidity; 
     
 }

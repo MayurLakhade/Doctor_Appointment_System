@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "UserServiceApplication",
+            "request": "launch",
+            "mainClass": "com.user.UserServiceApplication",
+            "projectName": "userService"
+        },
+        {
+            "type": "java",
             "name": "PatientServiceApplication",
             "request": "launch",
             "mainClass": "com.patient.PatientServiceApplication",
