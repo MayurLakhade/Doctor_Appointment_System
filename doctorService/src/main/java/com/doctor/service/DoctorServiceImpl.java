@@ -1,8 +1,6 @@
 package com.doctor.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.doctor.dto.UserDto;
 import com.doctor.entities.Doctor;
+import com.doctor.exception.DoctorNotFoundException;
 import com.doctor.repository.DoctorRepository;
 
 @Service
@@ -72,7 +71,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Doctor getDoctorById(Long id) {
         return doctorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Doctor not found with ID: " + id));
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with ID: " + id));
     }
 
     @Override
@@ -90,14 +89,14 @@ public class DoctorServiceImpl implements DoctorService {
             existingDoctor.setQualifications(updatedDoctor.getQualifications());
             return doctorRepository.save(existingDoctor);
         } else {
-            throw new RuntimeException("Doctor not found with ID: " + id);
+            throw new DoctorNotFoundException("Doctor not found with ID: " + id);
         }
     }
 
     @Override
     public void deleteDoctor(Long id) {
         if (!doctorRepository.existsById(id)) {
-            throw new RuntimeException("Doctor not found with ID: " + id);
+            throw new DoctorNotFoundException("Doctor not found with ID: " + id);
         }
         doctorRepository.deleteById(id);
     }

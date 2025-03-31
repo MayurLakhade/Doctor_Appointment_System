@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.patient.dto.UserDto;
 import com.patient.entities.Patient;
+import com.patient.exception.PatientNotFoundException;
 import com.patient.repository.PatientRepository;
 
 @Service
@@ -25,7 +26,7 @@ public class PatientServiceImpl implements PatientService{
 
     private final String USER_SERVICE_URL = "http://localhost:8084/uapi/users/";
 
-    //Doctor Signup
+    //Patient Signup
     @Override
     public ResponseEntity<String> registerPatient(Patient patient, String password, String role) {
         //Create UserDto (instead of User entity)
@@ -44,7 +45,7 @@ public class PatientServiceImpl implements PatientService{
             if (userResponse.getStatusCode().is2xxSuccessful() && userResponse.getBody() != null) {
                 Long userId = userResponse.getBody().getId(); // Get userId from Auth Service response
 
-                //Save doctor with userId
+                //Save patient with userId
                 patient.setUserId(userId);
                 patientRepository.save(patient);
                 return ResponseEntity.ok("Patient registered successfully!");
@@ -70,7 +71,7 @@ public class PatientServiceImpl implements PatientService{
     @Override
     public Patient getPatientById(Long id) {
         return patientRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + id));
+        .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + id));
     }
 
     @Override
@@ -88,14 +89,14 @@ public class PatientServiceImpl implements PatientService{
             existingPatient.setUserId(updatedPatient.getUserId());
             return patientRepository.save(existingPatient);
         } else {
-            throw new RuntimeException("Patient not found with ID: " + id);
+            throw new PatientNotFoundException("Patient not found with ID: " + id);
         }
     }
 
     @Override
     public void deletePatient(Long id) {
         if (!patientRepository.existsById(id)) {
-            throw new RuntimeException("Patient not found with ID: " + id);
+            throw new PatientNotFoundException("Patient not found with ID: " + id);
         }
         patientRepository.deleteById(id);
     }

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.user.entities.User;
+import com.user.exception.UserNotFoundException;
 import com.user.repository.UserRepository;
 import com.user.util.JwtUtil;
 
@@ -38,13 +39,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
 
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with Email: " + email));
+                .orElseThrow(() -> new UserNotFoundException("User not found with Email: " + email));
     }
 
     @Override
@@ -61,20 +62,20 @@ public class UserServiceImpl implements UserService{
             // existingUser.setIsActive(updatedUser.getIsActive());
             return userRepository.save(existingUser);
         } else {
-            throw new RuntimeException("User not found with ID: " + id);
+            throw new UserNotFoundException("User not found with ID: " + id);
         }
     }
 
     @Override
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found with ID: " + id);
+            throw new UserNotFoundException("User not found with ID: " + id);
         }
         userRepository.deleteById(id);
     }
 
-     //Signup API
-     public User registerUser(User user) {
+     
+    public User registerUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists!");
         }
@@ -83,10 +84,10 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
 
-    //Login API
+    
     public Map<String, Object> loginUser(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials!");

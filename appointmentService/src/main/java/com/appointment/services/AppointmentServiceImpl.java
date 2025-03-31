@@ -13,6 +13,7 @@ import com.appointment.dto.AppointmentDto;
 import com.appointment.dto.DoctorDto;
 import com.appointment.dto.PatientDto;
 import com.appointment.entities.Appointment;
+import com.appointment.exception.AppointmentNotFoundException;
 import com.appointment.repositories.AppointmentRepository;
 
 @Service
@@ -44,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentDto getAppointmentById(Long id) {
         Optional<Appointment> appointmentOptional = appointmentRepository.findById(id);
         if (appointmentOptional.isEmpty()) {
-            throw new RuntimeException("Appointment not found with ID: " + id);
+            throw new AppointmentNotFoundException("Appointment not found with ID: " + id);
         }
 
         Appointment appointment = appointmentOptional.get();
@@ -70,6 +71,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         );
     }
 
+    // method for getting doctor by id
     public DoctorDto getDoctorById(Long doctorId) {
         String url = DOCTOR_SERVICE_URL + doctorId;
         try {
@@ -79,6 +81,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    // method for getting patient by id
     public PatientDto getPatientById(Long patientId) {
         String url = PATIENT_SERVICE_URL + patientId;
         try {
@@ -111,7 +114,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment.setStatus(status);
             return appointmentRepository.save(appointment);
         }
-        throw new RuntimeException("Appointment not found");
+        throw new AppointmentNotFoundException("Appointment not found");
     }
 
     // @Override
@@ -131,7 +134,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (appointmentRepository.existsById(id)) {
             appointmentRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Appointment not found");
+            throw new AppointmentNotFoundException("Appointment not found");
         }
     }
 
@@ -143,7 +146,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment.setAppointmentDate(newDate);
             return appointmentRepository.save(appointment);
         } else {
-            throw new RuntimeException("Appointment not found with ID: " + id);
+            throw new AppointmentNotFoundException("Appointment not found with ID: " + id);
         }
     }
 }

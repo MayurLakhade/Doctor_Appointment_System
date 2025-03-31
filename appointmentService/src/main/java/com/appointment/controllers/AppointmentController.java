@@ -27,6 +27,7 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
+    // api for creating appointment
     @PostMapping("/schedule")
     public ResponseEntity<Appointment> createAppointment(@RequestParam Long doctorId,
                                                           @RequestParam Long patientId,
@@ -39,32 +40,38 @@ public class AppointmentController {
     //     return ResponseEntity.ok(appointmentService.getAppointmentById(id));
     // }
 
-     @GetMapping("/{id}")
+    // for getting appointment by id
+    @GetMapping("/{id}")
     public ResponseEntity<AppointmentDto> getAppointmentById(@PathVariable Long id) {
         AppointmentDto appointment = appointmentService.getAppointmentById(id);
         return ResponseEntity.ok(appointment);
     }
 
+    // for getting all appointments
     @GetMapping("/all")
     public ResponseEntity<List<Appointment>> getAllAppointments() {
         return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
+    // for getting appointments by doctor id
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable Long doctorId) {
         return ResponseEntity.ok(appointmentService.getAppointmentsByDoctorId(doctorId));
     }
 
+    // for getting appointments by patient id
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatientId(@PathVariable Long patientId) {
         return ResponseEntity.ok(appointmentService.getAppointmentsByPatientId(patientId));
     }
 
+    // for updating appointment status
     @PutMapping("/update-status/{id}")
     public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable Long id, @RequestParam String status) {
         return ResponseEntity.ok(appointmentService.updateAppointmentStatus(id, status));
     }
 
+    // for deleting appointment
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);

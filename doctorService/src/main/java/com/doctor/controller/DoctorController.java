@@ -23,37 +23,38 @@ public class DoctorController {
      @Autowired
     private DoctorService doctorService;
 
-    // 🔹 Create a new doctor
+    // Create a new doctor
     @PostMapping("/")
     public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
         return ResponseEntity.ok(doctorService.saveDoctor(doctor));
     }
 
-    // 🔹 Get all doctors
+    // Get all doctors
     @GetMapping("/")
     public ResponseEntity<List<Doctor>> getAllDoctors() {
         return ResponseEntity.ok(doctorService.getAllDoctors());
     }
 
-    // 🔹 Get doctor by ID
+    // Get doctor by ID
     @GetMapping("/{id}")
     public ResponseEntity<Doctor> getDoctorById(@PathVariable Long id) {
         return ResponseEntity.ok(doctorService.getDoctorById(id));
     }
 
-    // 🔹 Update doctor details
+    // Update doctor details
     @PutMapping("/{id}")
     public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
         return ResponseEntity.ok(doctorService.updateDoctor(id, doctor));
     }
 
-    // 🔹 Delete a doctor by ID
+    // Delete a doctor by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctor(id);
         return ResponseEntity.ok("Doctor deleted successfully!");
     }
 
+    // for registering doctor
     @PostMapping("/signup")
     public ResponseEntity<String> registerDoctor(@RequestBody Doctor doctor, @RequestParam String password, @RequestParam String role) {
         return doctorService.registerDoctor(doctor, password, role);
