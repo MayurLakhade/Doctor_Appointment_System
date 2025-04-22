@@ -24,7 +24,7 @@ public class PatientServiceImpl implements PatientService{
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String USER_SERVICE_URL = "http://localhost:8084/uapi/users/";
+    private final String USER_SERVICE_URL = "http://USERSERVICE/uapi/users/";
 
     //Patient Signup
     @Override

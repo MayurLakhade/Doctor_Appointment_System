@@ -28,8 +28,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String DOCTOR_SERVICE_URL = "http://localhost:8082/dapi/doctors/";
-    private final String PATIENT_SERVICE_URL = "http://localhost:8083/papi/patients/";
+    private final String DOCTOR_SERVICE_URL = "http://DOCTORSERVICE/dapi/doctors/";
+    private final String PATIENT_SERVICE_URL = "http://PATIENTSERVICE/papi/patients/";
 
     @Override
     public Appointment createAppointment(Long doctorId, Long patientId, LocalDateTime appointmentDate) {

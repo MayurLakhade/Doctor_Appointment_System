@@ -24,7 +24,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String USER_SERVICE_URL = "http://localhost:8084/uapi/users/";
+    private final String USER_SERVICE_URL = "http://USERSERVICE/uapi/users/";
 
     //Doctor Signup
     @Override
@@ -39,6 +39,8 @@ public class DoctorServiceImpl implements DoctorService {
         String url = USER_SERVICE_URL+"signup";
 
         try {
+            System.out.println("Sending UserDto: " + userDto.getPassword());
+
             ResponseEntity<UserDto> userResponse = restTemplate.postForEntity(url, userDto, UserDto.class);
 
             //Check if user creation was successful
